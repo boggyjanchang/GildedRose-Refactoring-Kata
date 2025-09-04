@@ -162,3 +162,32 @@ describe("Backstage Pass", function () {
   });
 });
 
+describe("Conjured item", function () {
+  it("before sell date", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 5, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(8);
+  });
+
+  it("on sell date", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 0, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-1);
+    expect(items[0].quality).toBe(6);
+  });
+
+  it("after sell date", function() {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", -1, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(-2);
+    expect(items[0].quality).toBe(6);
+  });
+
+  it("with a quality of 0", function() {
+    const gildedRose = new Shop([new Item("normal", 5, 0)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(0);
+  });
+});
